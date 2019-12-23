@@ -1,0 +1,32 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#b3e6a4",
+        "activityBar.activeBorder": "#6982d6",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#6982d6",
+        "activityBarBadge.foreground": "#15202b",
+        "titleBar.activeBackground": "#92db7c",
+        "titleBar.inactiveBackground": "#92db7c99",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveForeground": "#15202b99",
+        "statusBar.background": "#92db7c",
+        "statusBarItem.hoverBackground": "#71d054",
+        "statusBar.foreground": "#15202b"
+    },
+    "peacock.color": "#54e1f4",
+    "python.pythonPath": ".venv/bin/python",
+    "peacock.remoteColor": "#92db7c",
+    "python.analysis.openFilesOnly": false,
+    "python.analysis.memory.keepLibraryLocalVariables": true,
+    "python.autoComplete.addBrackets": true,
+    "python.venvPath": "${workspaceFolder}",
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.pytestEnabled": false,
+    "python.linting.pycodestylePath": "${workspaceFolder}/.venv/bin/pep8",
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.linting.pycodestyleEnabled": false,
+    "python.testing.promptToConfigure": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false
+}
