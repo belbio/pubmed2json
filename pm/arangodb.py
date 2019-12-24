@@ -1,6 +1,10 @@
+import logging
+
 import arango
 import pm.settings as settings
 import xxhash
+
+log = logging.getLogger()
 
 username = "root"
 password = ""
@@ -9,13 +13,14 @@ client = arango.ArangoClient(hosts=settings.ARANGO_URL)
 
 sys_db = client.db("_system", username=username, password=password)
 
-# Create a new database named "pubmed"
-if not sys_db.has_database("pubmed"):
+# Create a new database
+if not sys_db.has_database(settings.PUBMED_DB_NAME):
     sys_db.create_database(
-        name="pubmed", users=[{"username": username, "password": password, "active": True}],
+        name=settings.PUBMED_DB_NAME,
+        users=[{"username": username, "password": password, "active": True}],
     )
 
-pubmed_db = client.db("pubmed", username=username, password=password)
+pubmed_db = client.db(settings.PUBMED_DB_NAME, username=username, password=password)
 
 
 # xml collection
@@ -37,17 +42,23 @@ if not pubmed_db.has_collection("processed_files"):
 files_coll = pubmed_db.collection("processed_files")
 
 
-def add_xml(pmid: str, xml_article_str: str):
+def add_xml(pmid: str, filename: str, xml_article_str: str):
 
-    doc = {"_key": pmid, "article": xml_article_str}
-    xml_coll.insert(doc, overwrite=True, silent=True, return_old=False)
+    doc = {"_key": pmid, "filename": filename, "article": xml_article_str}
+    try:
+        xml_coll.insert(doc, overwrite=True, silent=True, return_old=False)
+    except arango.DocumentInsertError as e:
+        log.exception(f"Problem inserting Pubmed XML {pmid}  FN: {filename}")
 
 
 def add_json(pmid: str, article: dict):
 
     pmid = pmid
     doc = {"_key": pmid, "article": article}
-    json_coll.insert(doc, overwrite=True)
+    try:
+        json_coll.insert(doc, overwrite=True)
+    except arango.DocumentInsertError as e:
+        log.exception(f"Problem inserting Pubmed JSON {pmid}  FN: {article['pubmed_xml_fn']}")
 
 
 def add_processed_filename(fn: str, article_cnt: int, duration: float):

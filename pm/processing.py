@@ -46,7 +46,7 @@ def load_baseline_queue(baseline_queue):
 
     processed_files = db.get_processed_files()
 
-    files = glob.iglob(f"{settings.PUBMED_DATA_DIR}/baseline/*.gz")
+    files = sorted(glob.glob(f"{settings.PUBMED_DATA_DIR}/baseline/*.gz"))
     for fn in files:
         fn = fn.replace(f"{settings.PUBMED_DATA_DIR}/", "")
         if fn in processed_files:
@@ -99,7 +99,7 @@ def load_updatefiles():
 
     processed_files = db.get_processed_files()
 
-    files = glob.iglob(f"{settings.PUBMED_DATA_DIR}/updatefiles/*.gz")
+    files = sorted(glob.glob(f"{settings.PUBMED_DATA_DIR}/updatefiles/*.gz"))
 
     log.info("Starting to process updatefiles")
 

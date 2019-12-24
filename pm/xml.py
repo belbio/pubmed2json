@@ -84,11 +84,8 @@ def process_xml_record(record: Element, filename: str = ""):
     citation = record.find("MedlineCitation")
     pmid = citation.find("PMID").text
 
-    # t0 = time.time()
-    xml_record_str = ET.tostring(record, xml_declaration=True).decode("utf-8")
-    # print("Time", (time.time() - t0) * 1000.0, "ms")
-
     record_dict = convert_record(pmid, record)
+    record_dict["pubmed_xml_fn"] = filename
     # print(xml_record_str)
     import json
 
@@ -97,7 +94,9 @@ def process_xml_record(record: Element, filename: str = ""):
     # print(pmid, prettify(article))
 
     try:
-        db.add_xml(pmid, xml_record_str)
+        if settings.STORE_XML:
+            xml_record_str = ET.tostring(record, xml_declaration=True).decode("utf-8")
+            db.add_xml(pmid, filename, xml_record_str)
         db.add_json(pmid, record_dict)
     except Exception as e:
         log.exception(f"Problem adding PMID: {pmid} from {filename} - error: {str(e)}")
